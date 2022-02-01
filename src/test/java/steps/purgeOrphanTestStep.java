@@ -14,7 +14,7 @@ public class purgeOrphanTestStep {
 
     @Given("Sql server connection")
     public void sqlServerConnection() {
-        String connectionUrl = "jdbc:sqlserver://localhost;databaseName=BacktalkDB;user=shawon;password=sa1234";
+        String connectionUrl = "jdbc:sqlserver://localhost;databaseName=BacktalkDB;user=sa;password=sa123";
         try {
             // Load SQL Server JDBC driver and establish connection.
             System.out.print("Connecting to SQL Server ... ");
@@ -48,23 +48,13 @@ public class purgeOrphanTestStep {
         Assert.assertTrue(isTableExists);
     }
 
-    @And("I should get purge orphan data")
-    public void iShouldGetPurgeOrphanData() throws SQLException {
+    @And("I should not get orphan data")
+    public void iShouldNotGetOrphanData() throws SQLException {
         String sql = " select count(*) from [BacktalkDB].[dbo].[StatusUpdate] where DATEDIFF(DAY, CheckedDateTime, GETDATE()) > 14";
         PreparedStatement stmt = connection.prepareStatement(sql);
         ResultSet rs = stmt.executeQuery();
         rs.next();
         int count = rs.getInt(1);
-        Assert.assertEquals(1, count);
-    }
-
-    @And("I shouldn't get purge orphan data")
-    public void iShouldNotGetPurgeOrphanData() throws SQLException {
-        String sql = " select count(*) from [BacktalkDB].[dbo].[StatusUpdate] where DATEDIFF(DAY, CheckedDateTime, GETDATE()) < 14 ";
-        PreparedStatement stmt = connection.prepareStatement(sql);
-        ResultSet rs = stmt.executeQuery();
-        rs.next();
-        int count = rs.getInt(1);
-        Assert.assertEquals(5, count);
+        Assert.assertEquals("Number of records", 0, count);
     }
 }

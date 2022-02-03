@@ -6,6 +6,10 @@ import io.cucumber.java.en.Then;
 import org.junit.Assert;
 
 import javax.xml.transform.Result;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
 
 public class purgeOrphanTestStep {
@@ -14,7 +18,7 @@ public class purgeOrphanTestStep {
 
     @Given("Sql server connection")
     public void sqlServerConnection() {
-        String connectionUrl = "jdbc:sqlserver://localhost;databaseName=BacktalkDB;user=sa;password=sa123";
+        String connectionUrl = "jdbc:sqlserver://localhost;databaseName=BacktalkDB;user=shawon;password=sa1234";
         try {
             // Load SQL Server JDBC driver and establish connection.
             System.out.print("Connecting to SQL Server ... ");
@@ -56,5 +60,21 @@ public class purgeOrphanTestStep {
         rs.next();
         int count = rs.getInt(1);
         Assert.assertEquals("Number of records", 0, count);
+    }
+
+    @And("I should read data from {string} text file")
+    public void iShouldReadDataFromTextFile(String fileName) {
+        String content = null;
+        File file = new File(fileName); // For example, foo.txt
+        FileReader reader = null;
+        try {
+            reader = new FileReader(file);
+            char[] chars = new char[(int) file.length()];
+            reader.read(chars);
+            content = new String(chars);
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class purgeOrphanTestStep {
     private Connection connection;
@@ -64,15 +66,40 @@ public class purgeOrphanTestStep {
 
     @And("I should read data from {string} text file")
     public void iShouldReadDataFromTextFile(String fileName) {
-        String content = null;
-        File file = new File(fileName); // For example, foo.txt
-        FileReader reader = null;
+//        String content = null;
+//        File file = new File(fileName); // For example, foo.txt
+//        FileReader reader = null;
+//        try {
+//            reader = new FileReader(file);
+//            char[] chars = new char[(int) file.length()];
+//            reader.read(chars);
+//
+//            content = new String(chars);
+//            reader.close();
+        File file = new File(fileName);
+        ArrayList<String[]> arrayOfPeople = new ArrayList<>();
+
         try {
-            reader = new FileReader(file);
-            char[] chars = new char[(int) file.length()];
-            reader.read(chars);
-            content = new String(chars);
-            reader.close();
+            Scanner input = new Scanner(file);
+            int i=0;
+            while (input.hasNext()){
+                input.nextLine();                         //do this to skip the first line (header)while (input.hasNext()) {
+                String num = input.nextLine();
+                String[] personData = num.split(","); //returns the array of strings computed by splitting this string around matches of the given delimiter
+                arrayOfPeople.add(personData);
+
+                for(int j=0; j<arrayOfPeople.get(i).length; j++){
+                    System.out.print("Column :"+j+"= " +arrayOfPeople.get(i)[j]+ " ");
+                }
+
+              System.out.print("\n===============\n");
+                i++;
+            }
+//            for(int i=0; i<arrayOfPeople.size(); i++){
+//                System.out.println(arrayOfPeople.get(i));
+//            }
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }

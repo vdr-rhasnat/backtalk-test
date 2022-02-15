@@ -1,5 +1,5 @@
-Feature: InspectRX Database Test
-  Scenario: Data Read From Text file And Check With InspectRXDB
+Feature: InspectRX Database Change Test
+  Scenario: Mimic InspectRX DB Changes
     Given ATP batch file "c:/Innovation/Input/Batch8069845.txt"
     Then I should parse data from ATP batch file
     Given Sql server connection for database "dispensercheck"

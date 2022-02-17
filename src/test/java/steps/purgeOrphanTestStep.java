@@ -12,8 +12,8 @@ public class purgeOrphanTestStep {
     public static Connection connection;
     public static String connectionStatus;
 
-    @Then("I should get connection status {string}")
-    public void iShouldGetConnectionStatus(String status) {
+    @Then("User should get connection status {string}")
+    public void userShouldGetConnectionStatus(String status) {
         Assert.assertEquals(status, connectionStatus);
     }
 
@@ -31,8 +31,8 @@ public class purgeOrphanTestStep {
         Assert.assertTrue(isTableExists);
     }
 
-    @And("I should not get orphan data")
-    public void iShouldNotGetOrphanData() throws SQLException {
+    @And("User should not get orphan data")
+    public void userShouldNotGetOrphanData() throws SQLException {
         String sql = " select count(*) from [BacktalkDB].[dbo].[StatusUpdate] where DATEDIFF(DAY, CheckedDateTime, GETDATE()) < 14";
         PreparedStatement stmt = connection.prepareStatement(sql);
         ResultSet rs = stmt.executeQuery();

@@ -21,8 +21,8 @@ public class inspectRXStep {
     private Integer BagNumber = 0;
     private File file;
 
-    @And("I should get data from {string} table with orderId and bagNumber")
-    public void iShouldGetDataWithOrderIdAndBagNumber(String tableName) throws SQLException{
+    @And("User should get data from {string} table with orderId and bagNumber")
+    public void userShouldGetDataWithOrderIdAndBagNumber(String tableName) throws SQLException{
         orderId = statusDetails.get(0)[0].substring(1,8);
         BagNumber = Integer.parseInt(statusDetails.get(0)[20].substring(1,2));
         String sql = "select checked_by from "+tableName+" where batch = "+ orderId + " and bag = "+BagNumber+" and checked = 1 and is_result = 1";
@@ -40,8 +40,8 @@ public class inspectRXStep {
         Assert.assertTrue("The expected file does not exist", exists);
     }
 
-    @Then("I should parse data from ATP batch file")
-    public void iShouldParseDataFromAtpBatchFile() {
+    @Then("User should parse data from ATP batch file")
+    public void userShouldParseDataFromAtpBatchFile() {
         boolean exists = false;
         try {
             Scanner input = new Scanner(file);
@@ -66,8 +66,8 @@ public class inspectRXStep {
     }
 
 
-    @And("I should get UpdateStatusID, Checked, XMLGenerated and CVSAcknowlogement data from {string} table with orderId and BagNumber")
-    public void iShouldGetUpdateStatusIDCheckedXMLGeneratedAndCVSAcknowlogementDataFromTableWithOrderIdAndBagNumber(String tableName)  throws SQLException {
+    @And("User should get UpdateStatusID, Checked, XMLGenerated and CVSAcknowlogement data from {string} table with orderId and BagNumber")
+    public void userShouldGetUpdateStatusIDCheckedXMLGeneratedAndCVSAcknowlogementDataFromTableWithOrderIdAndBagNumber(String tableName)  throws SQLException {
         boolean status = false;
         String sql = "select UpdateStatusID, Checked, XMLGenerated, CVSAcknowlogement from "+tableName+" where OrderID = '"+ orderId+ "'and BagNumber ="+BagNumber+" and CheckedBy = "+checkedBy;
         PreparedStatement stmt = purgeOrphanTestStep.connection.prepareStatement(sql);
@@ -98,8 +98,8 @@ public class inspectRXStep {
         Assert.assertEquals(cvsAcknowlogement,CVSAcknowlogement);
     }
 
-    @And("I should get data from {string} table with statusUpdateId and status true")
-    public void iShouldGetDataFromTableWithStatusUpdateIdAndStatusTrue(String tableName) throws SQLException {
+    @And("User should get data from {string} table with statusUpdateId and status true")
+    public void userShouldGetDataFromTableWithStatusUpdateIdAndStatusTrue(String tableName) throws SQLException {
         String sql = "select count(*) from "+tableName+" where UpdateStatusID = "+ UpdateStatusID + " and Status = 'true'";
         PreparedStatement stmt = purgeOrphanTestStep.connection.prepareStatement(sql);
         ResultSet rs = stmt.executeQuery();

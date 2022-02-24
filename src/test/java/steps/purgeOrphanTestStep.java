@@ -1,6 +1,8 @@
 package steps;
 
-import DbContext.DbConnection;
+import Context.DbConnection;
+import Context.GlobalContext;
+import GenericInfo.genericFactory;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -9,51 +11,28 @@ import org.junit.Assert;
 import java.sql.*;
 
 public class purgeOrphanTestStep {
-    public static Connection connection;
-    public static String connectionStatus;
+    private genericFactory gen = new genericFactory();
 
-    @Then("User should get connection status {string}")
-    public void userShouldGetConnectionStatus(String status) {
-        Assert.assertEquals(status, connectionStatus);
+    @Given("sql server connection for database {string}")
+    public void sqlServerConnectionForDatabase(String databaseName) {
+      boolean isActive = gen.checkServerConnection(databaseName);
+      Assert.assertTrue("Sql Server Connection Failed", isActive);
     }
 
-    @And("Table {string} should exists")
+    @When("user get connection status {string}")
+    public void userGetConnectionStatus(String status) {
+        Assert.assertEquals(status, GlobalContext.connectionStatus);
+    }
+
+    @Then("table {string} should exists")
     public void tableShouldExists(String table) throws SQLException {
-        boolean isTableExists;
-        DatabaseMetaData dbm = connection.getMetaData();
-        ResultSet tables = dbm.getTables(null, null, table, null);
-        if (tables.next()) {
-            isTableExists = true;
-        }
-        else {
-            isTableExists = false;
-        }
+        boolean isTableExists = gen.isExistTable(table);
         Assert.assertTrue(isTableExists);
     }
 
-    @And("User should not get orphan data")
-    public void userShouldNotGetOrphanData() throws SQLException {
-        String sql = " select count(*) from [BacktalkDB].[dbo].[StatusUpdate] where DATEDIFF(DAY, CheckedDateTime, GETDATE()) < 14";
-        PreparedStatement stmt = connection.prepareStatement(sql);
-        ResultSet rs = stmt.executeQuery();
-        rs.next();
-        int count = rs.getInt(1);
+    @And("user should get orphan data")
+    public void userShouldGetOrphanData() throws SQLException {
+        int count = gen.GetOrphanData();
         Assert.assertEquals("Number of records in StatusUpDate Table", 7, count);
-    }
-
-    @Given("Sql server connection for database {string}")
-    public void sqlServerConnectionForDatabase(String databaseName) {
-        String connectionUrl = DbConnection.connectionUrl +databaseName;
-        try {
-            // Load SQL Server JDBC driver and establish connection.
-            System.out.print("Connecting to SQL Server ... ");
-            connection = DriverManager.getConnection(connectionUrl);
-            System.out.println("Connected");
-            connectionStatus = "Success";
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            connectionStatus = "Error";
-        }
     }
 }

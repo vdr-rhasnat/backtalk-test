@@ -21,7 +21,7 @@ public class inspectRXStep {
         Assert.assertTrue("The expected file does not exist", checkFile);
     }
 
-    @And("batch file should contain ATP Exported data")
+    @Then("batch file should contain ATP exported data")
     public void batchFileShouldContainATPExportedData() {
         boolean checkData = false;
         GlobalContext.statusDetails = gen.readDataFromFile(GlobalContext.fileName);
@@ -31,14 +31,14 @@ public class inspectRXStep {
         Assert.assertTrue("There is no data in ATP batch file.",checkData);
     }
 
-    @And("get ATP Exported data from {string} table with orderId and bagNumber")
-    public void getATPExportedDataWithOrderIdAndBagNumber(String tableName) throws SQLException{
+    @And("{string} table should contain b_batch_bag data with orderId and bagNumber")
+    public void b_batch_bagTableShouldContainb_batch_bagDataWithOrderIdAndBagNumber(String tableName) throws SQLException{
         GlobalContext.checkedBy = gen.getDataWithOrderIdAndBagNumber(tableName);
         Assert.assertEquals("Checked Data With b_batch_bag Table",100,GlobalContext.checkedBy);
     }
 
-    @When("user get UpdateStatusID, Checked, XMLGenerated and CVSAcknowlogement data from {string} table with orderId and BagNumber")
-    public void userGetUpdateStatusIDCheckedXMLGeneratedAndCVSAcknowlogementDataFromTableWithOrderIdAndBagNumber(String tableName)  throws SQLException {
+    @When("{string} table should contain UpdateStatusID, Checked, XMLGenerated and CVSAcknowlogement data  with orderId and BagNumber")
+    public void statusUpDateTableShouldContainUpdateStatusIDCheckedXMLGeneratedAndCVSAcknowlogementDataWithOrderIdAndBagNumber(String tableName)  throws SQLException {
         boolean status = gen.getUpdateStatusIDCheckedXMLGeneratedAndCVSAcknowlogementDataFromTableWithOrderIdAndBagNumber(tableName);
         Assert.assertTrue("Checked Data With StatusUpDate Table",status);
     }
@@ -53,8 +53,8 @@ public class inspectRXStep {
         Assert.assertEquals(xmlGenerated,GlobalContext.XMLGenerated);
     }
 
-    @And("user get PMS status from {string} table with statusUpdateId")
-    public void userShouldGetDataFromTableWithStatusUpdateId(String tableName) throws SQLException {
+    @And("{string} table should contain PMS status with statusUpdateId")
+    public void pmsMessageLogTableShouldContainPMSStatusWithStatusUpdateId(String tableName) throws SQLException {
         int count =  gen.getDataFromTableWithStatusUpdateId(tableName);
         Assert.assertEquals(1,count);
     }

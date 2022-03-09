@@ -20,6 +20,7 @@ public class GlobalContext {
     public static String orderId = "";
     public static Integer BagNumber = 0;
     public static String fileName = "";
+    public static boolean statusCheck = false;
     public static genericFactory gen = new genericFactory();
 
 }

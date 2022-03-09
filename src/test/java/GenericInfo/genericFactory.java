@@ -60,11 +60,12 @@ public class genericFactory {
        return GlobalContext.statusDetails;
     }
 
-    public int getDataFromTableWithStatusUpdateIdAndStatusTrue(String tableName) throws SQLException {
-        String sql = "select count(*) from "+tableName+" where UpdateStatusID = "+ GlobalContext.UpdateStatusID + " and Status = 'true'";
+    public int getDataFromTableWithStatusUpdateId(String tableName) throws SQLException {
+        String sql = "select count(*), Status from "+tableName+" where UpdateStatusID = "+ GlobalContext.UpdateStatusID+"Group By Status";
         PreparedStatement stmt = GlobalContext.connection.prepareStatement(sql);
         ResultSet rs = stmt.executeQuery();
         rs.next();
+        GlobalContext.statusCheck = rs.getBoolean(1);
         int count = rs.getInt(1);
         return count;
     }

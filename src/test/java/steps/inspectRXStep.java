@@ -1,5 +1,4 @@
 package steps;
-
 import Context.GlobalContext;
 import GenericInfo.genericFactory;
 import io.cucumber.java.en.And;
@@ -7,13 +6,10 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
-import org.junit.Assume;
 
-import java.io.File;
-import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Scanner;
+import static org.hamcrest.Matchers.isOneOf;
+import static org.junit.Assert.assertThat;
 
 public class inspectRXStep {
     private genericFactory gen = new genericFactory();
@@ -25,8 +21,8 @@ public class inspectRXStep {
         Assert.assertTrue("The expected file does not exist", checkFile);
     }
 
-    @And("batch file should contain data")
-    public void batchFileShouldContainData() {
+    @And("batch file should contain ATP Exported data")
+    public void batchFileShouldContainATPExportedData() {
         boolean checkData = false;
         GlobalContext.statusDetails = gen.readDataFromFile(GlobalContext.fileName);
         if(GlobalContext.statusDetails.size()>0){
@@ -35,8 +31,8 @@ public class inspectRXStep {
         Assert.assertTrue("There is no data in ATP batch file.",checkData);
     }
 
-    @And("user should get data from {string} table with orderId and bagNumber")
-    public void userShouldGetDataWithOrderIdAndBagNumber(String tableName) throws SQLException{
+    @And("get ATP Exported data from {string} table with orderId and bagNumber")
+    public void getATPExportedDataWithOrderIdAndBagNumber(String tableName) throws SQLException{
         GlobalContext.checkedBy = gen.getDataWithOrderIdAndBagNumber(tableName);
         Assert.assertEquals("Checked Data With b_batch_bag Table",100,GlobalContext.checkedBy);
     }
@@ -60,20 +56,17 @@ public class inspectRXStep {
     @And("user get PMS status from {string} table with statusUpdateId")
     public void userShouldGetDataFromTableWithStatusUpdateId(String tableName) throws SQLException {
         int count =  gen.getDataFromTableWithStatusUpdateId(tableName);
-        Assert.assertEquals(2,count);
+        Assert.assertEquals(1,count);
     }
 
-    @And("CVSAcknowlogement field value is {int}")
-    public void checkCvsacknowlogementFieldValue(int cvsAcknowledgementValue) {
-//        int cvsAcknowlogement = 0;
-//        if(GlobalContext.statusCheck){
-//            cvsAcknowlogement = 1;
-//        }
-        Assert.assertEquals(cvsAcknowledgementValue, GlobalContext.CVSAcknowlogement);
+    @And("CVSAcknowlogement field value should be {int} or {int}")
+    public void checkCvsacknowlogementFieldValueShouldzeroOrOne(int cvsack1, int cvsack2) {
+        assertThat(GlobalContext.CVSAcknowlogement, isOneOf(cvsack1, cvsack2));
     }
-    @And("Status field value shoudld be {int}")
-    public void checkStatusFieldValue(int PmsStatus) {
-//        int cvsAcknowlogement = 0;
+
+    @And("Status field value should be equals to CVSAcknowlogement field value")
+    public void checkStatusFieldValueShouldBeEqualToCVSAcknowledgementFieldValue() {
+        int PmsStatus =0;
         if(GlobalContext.statusCheck){
             PmsStatus = 1;
         }

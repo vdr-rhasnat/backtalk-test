@@ -1,12 +1,12 @@
-Feature: InspectRX Database Change Test
+Feature: InspectRX and BacktalkDB Database Change Test
   Scenario: Reading data from ATP batch file
     Given ATP batch file "c:/Innovation/Input/Batch8069845.txt"
-    And batch file should contain data
+    And batch file should contain ATP Exported data
 
   Scenario: Check existence of b_batch_bag table with data in dispensercheck database
     Given sql server connection for database "dispensercheck"
     Then table "b_batch_bag" should exists
-    And user should get data from "b_batch_bag" table with orderId and bagNumber
+    And get ATP Exported data from "b_batch_bag" table with orderId and bagNumber
 
   Scenario: Check existence of StatusUpdate and PMSMessagelog tables in BacktalkDB database
     Given sql server connection for database "BacktalkDB"
@@ -20,6 +20,6 @@ Feature: InspectRX Database Change Test
 
   Scenario: Check PMS status in PMSMessagelog table
     When user get PMS status from "PMSMessageLog" table with statusUpdateId
-    Then CVSAcknowlogement field value is 0
-    And Status field value shoudld be 0
+    Then CVSAcknowlogement field value should be 0 or 1
+    And Status field value should be equals to CVSAcknowlogement field value
 

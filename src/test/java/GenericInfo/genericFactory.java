@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class genericFactory {
     private ArrayList<String[]> statusDetails = new ArrayList<>();
 
-    public boolean isExistTable(String table) throws SQLException {
+    public boolean tableIsExist(String table) throws SQLException {
         boolean isExists = false;
         DatabaseMetaData dbm = GlobalContext.connection.getMetaData();
         ResultSet tables = dbm.getTables(null, null, table, null);
@@ -97,8 +97,8 @@ public class genericFactory {
         return status;
     }
 
-    public int GetOrphanData() throws SQLException {
-        String sql = " select count(*) from [BacktalkDB].[dbo].[StatusUpdate] where DATEDIFF(DAY, CheckedDateTime, GETDATE()) > 14";
+    public int orphanDataIsNotExist() throws SQLException {
+        String sql = " select count(*) from [BacktalkDB].[dbo].[StatusUpdate] where DATEDIFF(DAY, CheckedDateTime, GETDATE()) < 14";
         PreparedStatement stmt = GlobalContext.connection.prepareStatement(sql);
         ResultSet rs = stmt.executeQuery();
         rs.next();

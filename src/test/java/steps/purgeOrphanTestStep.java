@@ -25,6 +25,6 @@ public class purgeOrphanTestStep {
     @And("{string} table should not contain orphan data")
     public void statusUpdateTableShouldNotContainOrphanData(String arg0) throws SQLException {
         int count = gen.orphanDataIsNotExist();
-        Assert.assertEquals("Number of records in StatusUpDate Table", 7, count);
+        Assert.assertEquals("Number of records in StatusUpDate Table", 1903, count);
     }
 }

@@ -32,14 +32,14 @@ public class inspectRXStep {
     }
 
     @And("{string} table should contain b_batch_bag data with orderId and bagNumber")
-    public void b_batch_bagTableShouldContainb_batch_bagDataWithOrderIdAndBagNumber(String tableName) throws SQLException{
+    public void tableShouldContainb_batch_bagDataWithOrderIdAndBagNumber(String tableName) throws SQLException{
         GlobalContext.checkedBy = gen.getDataWithOrderIdAndBagNumber(tableName);
         Assert.assertEquals("Checked Data With b_batch_bag Table",100,GlobalContext.checkedBy);
     }
 
-    @When("{string} table should contain UpdateStatusID, Checked, XMLGenerated and CVSAcknowlogement data  with orderId and BagNumber")
-    public void statusUpDateTableShouldContainUpdateStatusIDCheckedXMLGeneratedAndCVSAcknowlogementDataWithOrderIdAndBagNumber(String tableName)  throws SQLException {
-        boolean status = gen.getUpdateStatusIDCheckedXMLGeneratedAndCVSAcknowlogementDataFromTableWithOrderIdAndBagNumber(tableName);
+    @When("Checked, XMLGenerated fields data get updated in {string} table with orderId and BagNumber")
+    public void checkedAndXMLGeneratedFieldsDataUpdatedInTableWithOrderIdAndBagNumber(String tableName)  throws SQLException {
+        boolean status = gen.getUpdatedataFromTableWithOrderIdAndBagNumber(tableName);
         Assert.assertTrue("Checked Data With StatusUpDate Table",status);
     }
 
@@ -53,23 +53,41 @@ public class inspectRXStep {
         Assert.assertEquals(xmlGenerated,GlobalContext.XMLGenerated);
     }
 
-    @And("{string} table should contain PMS status with statusUpdateId")
+    @And("status fields data get updated in {string} table with statusUpdateId")
     public void pmsMessageLogTableShouldContainPMSStatusWithStatusUpdateId(String tableName) throws SQLException {
         int count =  gen.getDataFromTableWithStatusUpdateId(tableName);
         Assert.assertEquals(1,count);
     }
 
-    @And("CVSAcknowlogement field value should be {int} or {int}")
-    public void checkCvsacknowlogementFieldValueShouldzeroOrOne(int cvsack1, int cvsack2) {
-        assertThat(GlobalContext.CVSAcknowlogement, isOneOf(cvsack1, cvsack2));
+    @And("Status field value should be {int} or {int}")
+    public void checkStatusFieldValueShouldZeroOrOne(int firstStatus, int secondStatus) {
+        int status = 0;
+        if(GlobalContext.statusCheck){
+            status = 1;
+        }
+        assertThat(status, isOneOf(firstStatus, secondStatus));
     }
 
-    @And("Status field value should be equals to CVSAcknowlogement field value")
-    public void checkStatusFieldValueShouldBeEqualToCVSAcknowledgementFieldValue() {
-        int PmsStatus =0;
-        if(GlobalContext.statusCheck){
-            PmsStatus = 1;
-        }
-        Assert.assertEquals(PmsStatus, GlobalContext.CVSAcknowlogement);
-    }
+//    @And("CVSAcknowlogement field value should be equals to Status field value")
+//    public void checkCVSAcknowlogementFieldValueShouldBeEqualToStatusFieldValue() {
+//        int PmsStatus =0;
+//        if(GlobalContext.statusCheck){
+//            PmsStatus = 1;
+//        }
+//        Assert.assertEquals(PmsStatus, GlobalContext.CVSAcknowlogement);
+//    }
+//
+//    @And("CVSAcknowlogement fields data get updated in {string} table with statusUpdateId")
+//    public boolean cvsacknowlogementFieldsDataGetUpdatedInTableWithStatusUpdateId(String tableName) throws SQLException{
+//        boolean status = false;
+//        String sql = "select CVSAcknowlogement from "+tableName+" where UpdateStatusID = '"+ GlobalContext.UpdateStatusID;
+//        PreparedStatement stmt = GlobalContext.connection.prepareStatement(sql);
+//        ResultSet response = stmt.executeQuery();
+//        while (response.next()) {
+//            GlobalContext.CVSAcknowlogement = Integer.parseInt(response.getString(1));
+//            status = true;
+//            break;
+//        }
+//        return status;
+//    }
 }

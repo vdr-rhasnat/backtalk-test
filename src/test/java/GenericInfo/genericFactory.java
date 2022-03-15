@@ -81,7 +81,7 @@ public class genericFactory {
         return checkedBy;
     }
 
-    public boolean getUpdateStatusIDCheckedXMLGeneratedAndCVSAcknowlogementDataFromTableWithOrderIdAndBagNumber(String tableName)  throws SQLException{
+    public boolean getUpdatedataFromTableWithOrderIdAndBagNumber(String tableName)  throws SQLException{
         boolean status = false;
         String sql = "select UpdateStatusID, Checked, XMLGenerated, CVSAcknowlogement from "+tableName+" where OrderID = '"+ GlobalContext.orderId+ "'and BagNumber ="+GlobalContext.BagNumber+" and CheckedBy = "+GlobalContext.checkedBy;
         PreparedStatement stmt = GlobalContext.connection.prepareStatement(sql);
@@ -90,7 +90,6 @@ public class genericFactory {
             GlobalContext.UpdateStatusID =Integer.parseInt(response.getString(1));
             GlobalContext.checked =Integer.parseInt(response.getString(2));
             GlobalContext.XMLGenerated = Integer.parseInt(response.getString(3));
-            GlobalContext.CVSAcknowlogement = Integer.parseInt(response.getString(4));
             status = true;
             break;
         }
